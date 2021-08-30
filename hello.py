@@ -11,6 +11,6 @@ app = Flask(__name__)
 #     app.run()    
 
 
-@app.route('/login')
-def hello(name=None):
-    return render_template('login.html', name=name)
+@app.route('/login/<loginame>')
+def hello(loginame):
+    return render_template('login.html',loginame=loginame)
