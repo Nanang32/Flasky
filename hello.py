@@ -29,6 +29,7 @@ app = Flask(__name__)
 def login():
     error = None
     if request.method == 'POST':
-        return ' testing panggil halaman post  ' + request.form['username']+ '\n' + request.form['password']
-
+        users = request.form['username']
+        pwd = request.form['password']
+        return ' testing panggil halaman post  ' + users + '\n' + pwd
     return render_template('login.html', error=error)
