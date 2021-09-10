@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request,redirect, url_for
+from flask import Flask, render_template, request,make_response,redirect, url_for
 
 from markupsafe import escape
 app = Flask(__name__)
@@ -31,5 +31,12 @@ def login():
     if request.method == 'POST':
         users = request.form['username']
         pwd = request.form['password']
-        return ' testing panggil halaman post  ' + users + '\n' + pwd
+        respo = make_response(' testing panggil halaman post  ' + users + '\n' + pwd)
+        respo.set_cookie('email_user',users)
+        return respo
     return render_template('login.html', error=error)
+
+@app.route('/getcookie')
+def getCookie():
+    email = request.cookies.get('email_user')
+    return  'email yang tersimpan di Cookie adalah' + email
