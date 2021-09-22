@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request,make_response,redirect, url_for
-
+import sqlite3
 from markupsafe import escape
 app = Flask(__name__)
 
@@ -25,15 +25,17 @@ app = Flask(__name__)
 #         return render_template('login.html')
 
 
-@app.route('/login/', methods=['GET', 'POST'])
-def login():
+@app.route('/register/', methods=['GET', 'POST'])
+def register():
     error = None
+    db = sqlite3.connect('phonebook.sqlite')
+    cursor = db.cursor()
     if request.method == 'POST':
-        users = request.form['username']
-        pwd = request.form['password']
-        respo = make_response(' testing panggil halaman post  ' + users + '\n' + pwd)
-        respo.set_cookie('email_user',users)
-        return respo
+        nmphone = request.form['username']
+        phnumber = request.form['password']
+
+        cursor.execute('INSERT INTO pbook(namephone,phonenumber) VALUES (?,?)', (nmphone, phnumber))
+        db.commit()
     return render_template('login.html', error=error)
 
 @app.route('/getcookie')
@@ -42,21 +44,20 @@ def getCookie():
     return  'email yang tersimpan di Cookie adalah' + email
 
 
-@app.route('/handle-data', methods=['POST'])
+@app.route('/')
 def sendb():
     db = sqlite3.connect('phonebook.sqlite')
     cursor = db.cursor()
 
-    if request.method == 'POST':
-        nmphone = request.form['namephone']
-        phnumber = request.form['phonenumber']
-
-        cursor.execute('INSERT INTO pbook(namephone,phonenumber) VALUES (?,?)', (nmphone, phnumber))
-        db.commit()
+    # if request.method == 'POST':
+    #     nmphone = request.form['namephone']
+    #     phnumber = request.form['phonenumber']
+    #
+    #     cursor.execute('INSERT INTO pbook(namephone,phonenumber) VALUES (?,?)', (nmphone, phnumber))
+    #     db.commit()
     # cursor.execute('INSERT INTO pbook(namephone,phonenumber) VALUES ("kot","443")')
     # db.commit()
 
-    # cursor.execute('SELECT * FROM pbook')
-    # data = cursor.fetchall()
-
-    # return  str(data)
+    cursor.execute('SELECT * FROM pbook')
+    data = cursor.fetchall()
+    return  str(data)
