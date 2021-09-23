@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request,make_response,redirect, url_for
+from flask import Flask, render_template, request,make_response,redirect, url_for ,jsonify
 import sqlite3
 from markupsafe import escape
 app = Flask(__name__)
@@ -37,6 +37,8 @@ def register():
 
         cursor.execute('INSERT INTO akun(username,password,email) VALUES (?,?,?)', (acusername, acpassword,acemail))
         db.commit()
+        return redirect("/")
+
     return render_template('login.html', error=error)
 
 @app.route('/getcookie')
@@ -61,4 +63,4 @@ def sendb():
 
     cursor.execute('SELECT * FROM akun')
     data = cursor.fetchall()
-    return  str(data)
+    return  jsonify(data)
