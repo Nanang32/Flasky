@@ -28,13 +28,14 @@ app = Flask(__name__)
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
     error = None
-    db = sqlite3.connect('phonebook.sqlite')
+    db = sqlite3.connect('users.sqlite')
     cursor = db.cursor()
     if request.method == 'POST':
-        nmphone = request.form['username']
-        phnumber = request.form['password']
+        acusername = request.form['username']
+        acpassword = request.form['password']
+        acemail = request.form['email']
 
-        cursor.execute('INSERT INTO pbook(namephone,phonenumber) VALUES (?,?)', (nmphone, phnumber))
+        cursor.execute('INSERT INTO akun(username,password,email) VALUES (?,?,?)', (acusername, acpassword,acemail))
         db.commit()
     return render_template('login.html', error=error)
 
@@ -46,7 +47,7 @@ def getCookie():
 
 @app.route('/')
 def sendb():
-    db = sqlite3.connect('phonebook.sqlite')
+    db = sqlite3.connect('users.sqlite')
     cursor = db.cursor()
 
     # if request.method == 'POST':
@@ -58,6 +59,6 @@ def sendb():
     # cursor.execute('INSERT INTO pbook(namephone,phonenumber) VALUES ("kot","443")')
     # db.commit()
 
-    cursor.execute('SELECT * FROM pbook')
+    cursor.execute('SELECT * FROM akun')
     data = cursor.fetchall()
     return  str(data)

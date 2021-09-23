@@ -1,12 +1,13 @@
 import sqlite3
 
-connection = sqlite3.connect("phonebook.sqlite")
+connection = sqlite3.connect("users.sqlite")
 
 cursor = connection.cursor()
-sql = """ CREATE TABLE pbook(
+sql = """ CREATE TABLE akun(
         id integer PRIMARY KEY,
-        namephone text NOT NULL,
-        phonenumber number NOT NULL
+        username text NOT NULL,
+        password text NOT NULL,
+        email text NOT NULL
 )"""
 
 cursor.execute(sql)
